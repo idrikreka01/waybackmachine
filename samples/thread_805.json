@@ -1,0 +1,343 @@
+{
+  "thread": {
+    "thread_id": 805,
+    "title": "NBS Big 3 upgrade",
+    "url": "https://web.archive.org/web/20160111013726/http://www.fullsizechevy.com/forum/general-discussion/audio-video-electronics/120517-nbs-big-3-upgrade.html",
+    "category_path": "General Discussion > Audio/Video Electronics",
+    "replies_no": 317,
+    "pagination": true,
+    "pagination_no": 16,
+    "is_sticky": true,
+    "first_post_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tMy example is from my NBS truck, but this will work for any vehicle.  You just have to carefully measure the wire lengths, and figure out how to route the wires.<br>\n<br>\nThe purpose of the BIG 3 upgrade is to improve current flow, thus diminishing voltage sag.  This is an upgrade/addition to the factory wiring, and not a replacement of the factory wiring.  This is not a cure all for dimming headlights, but it's a start.  Other recommended upgrades to be used in conjunction with the BIG 3 upgrade are deep cycle batteries (Optima Yellow Top) and high output alternators.<br>\n<br>\nI ended up using some extra 0 gauge wire that I had laying around from previous installs, but 4 gauge will do.  For my system, I used Audiopipe battery terminals, Stinger HPM Series 0 gauge (red and silver), and Stinger Expert Series 0 gauge ring terminals.<br>\n<br>\nList of supplies:<br>\n1) battery positive to alternator (approx. 4’),<br>\n2) battery negative to chassis (approx. 4’),<br>\n3) engine block to chassis (approx. 5’),<br>\n4) 4 ring terminals,<br>\n5) heatshrink (to cover ring terminals),<br>\n6) flex loom (I didn’t use any because the Stinger wire was so pretty).<br>\n<br>\nI would estimate the total cost of supplies to be $50-100, depending on the wire size/color and connector type.  If you don’t care about how the wire looks, look into using welding wire:<br>\n<br>\nPICS:<br>\nThe red (+) goes to the alternator +. The silver (-) goes to a chassis bolt under the truck:<br>\n<img src=\"http://home.comcast.net/~x6369x/pics/sierra/big3-1.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\"><br>\nThe red (+) comes from the battery.  The silver (-) is connected to the engine block just above the PS fluid reservoir and goes to a factory ground location on the fire wall:<br>\n<img src=\"http://home.comcast.net/~x6369x/pics/sierra/big3-2.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\"><br>\n<img src=\"http://home.comcast.net/~x6369x/pics/sierra/big3-3.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\"><br>\n<br>\n4/0 welding wire (courtesy of Rick/idbl_Fanatic):<br>\n<img src=\"http://img.photobucket.com/albums/v238/idbl_fanatic/Chris/100_17699.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\">\n\t\t\t\t\t\t</blockquote>",
+    "posts": [
+      {
+        "id": 3594,
+        "post_date_time": "2004-08-11T12:12:00",
+        "user_username": "x6369x",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tMy example is from my NBS truck, but this will work for any vehicle.  You just have to carefully measure the wire lengths, and figure out how to route the wires.<br>\n<br>\nThe purpose of the BIG 3 upgrade is to improve current flow, thus diminishing voltage sag.  This is an upgrade/addition to the factory wiring, and not a replacement of the factory wiring.  This is not a cure all for dimming headlights, but it's a start.  Other recommended upgrades to be used in conjunction with the BIG 3 upgrade are deep cycle batteries (Optima Yellow Top) and high output alternators.<br>\n<br>\nI ended up using some extra 0 gauge wire that I had laying around from previous installs, but 4 gauge will do.  For my system, I used Audiopipe battery terminals, Stinger HPM Series 0 gauge (red and silver), and Stinger Expert Series 0 gauge ring terminals.<br>\n<br>\nList of supplies:<br>\n1) battery positive to alternator (approx. 4’),<br>\n2) battery negative to chassis (approx. 4’),<br>\n3) engine block to chassis (approx. 5’),<br>\n4) 4 ring terminals,<br>\n5) heatshrink (to cover ring terminals),<br>\n6) flex loom (I didn’t use any because the Stinger wire was so pretty).<br>\n<br>\nI would estimate the total cost of supplies to be $50-100, depending on the wire size/color and connector type.  If you don’t care about how the wire looks, look into using welding wire:<br>\n<br>\nPICS:<br>\nThe red (+) goes to the alternator +. The silver (-) goes to a chassis bolt under the truck:<br>\n<img src=\"http://home.comcast.net/~x6369x/pics/sierra/big3-1.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\"><br>\nThe red (+) comes from the battery.  The silver (-) is connected to the engine block just above the PS fluid reservoir and goes to a factory ground location on the fire wall:<br>\n<img src=\"http://home.comcast.net/~x6369x/pics/sierra/big3-2.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\"><br>\n<img src=\"http://home.comcast.net/~x6369x/pics/sierra/big3-3.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\"><br>\n<br>\n4/0 welding wire (courtesy of Rick/idbl_Fanatic):<br>\n<img src=\"http://img.photobucket.com/albums/v238/idbl_fanatic/Chris/100_17699.jpg\" border=\"0\" alt=\"\" onload=\"NcodeImageResizer.createOn(this);\">\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3595,
+        "post_date_time": "2005-09-19T00:01:00",
+        "user_username": "x6369x",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tI don't have any SPL #'s to confirm that it works or not, but I do notice that my headlights don't dim as bad as compared to stock.<br>\n<br>\nEveryone will tell you that this is one of many electrical upgrades you can do, and possibly the cheapest upgrade you can do, besides ...<br>\ndeep cycle battery (like Optima),<br>\nHO alternator\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3596,
+        "post_date_time": "2005-11-24T03:25:00",
+        "user_username": "Supa_c",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<a href=\"http://www.weldingsupply.com/\" target=\"_blank\">www.weldingsupply.com</a> for cheap 1/0 wire and terminals.<br>\nDoesnt get any cheaper...<br>\nName brand wont make any difference here.<br>\nIf you like nice looking wire then by all means splurge on it.<br>\nIt wont offer anything other than that.<br>\nBig 3 is a cheap way to cure dimming.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3597,
+        "post_date_time": "2006-01-08T04:24:00",
+        "user_username": "snuffalupagis",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tTotal newb question...are there any downsides to upgrading electrical wires to 0 gauge, especially safety concerns?\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3598,
+        "post_date_time": "2006-01-08T23:00:00",
+        "user_username": "x6369x",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>snuffalupagis</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">Total newb question...are there any downsides to upgrading electrical wires to 0 gauge, especially safety concerns?</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>Well, 2 out of the 3 wires are grounds, so that won't cause any saftey concenrs.<br>\n<br>\nThe OEM wire from the alt to the pos terminal of the battery isn't fused, so I don't think adding a bigger run of wire would make much of a difference if that wire shorted.  For that wire to short, you'd have to get in a major front end collision anyways.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3599,
+        "post_date_time": "2006-01-11T09:36:00",
+        "user_username": "fox_forma",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tare you using the  4/0 welding wire to go to your amp for your system?  Just curious cause i need to upgrade to a larger gauge wire for my system and no one in my area actually has 4awg stereo wire that i can just get by the foot.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3600,
+        "post_date_time": "2006-01-11T11:08:00",
+        "user_username": "x6369x",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>fox_forma</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">are you using the  4/0 welding wire to go to your amp for your system?  Just curious cause i need to upgrade to a larger gauge wire for my system and no one in my area actually has 4awg stereo wire that i can just get by the foot.</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>There's a big difference between 4/0 and regular 4 gauge.  Which one are you referring to?<br>\n<br>\nI am running 2 runs of 1/0 from front to back.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3601,
+        "post_date_time": "2006-01-11T20:34:00",
+        "user_username": "fox_forma",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\ti was more or less curious about the wires you ran to the amp cause it said welding wire in the pic, but i got the correct wire i needed today anyhow and plenty of it so i can hook up everything and do the BIG 3\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3602,
+        "post_date_time": "2006-01-12T16:31:00",
+        "user_username": "x6369x",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>fox_forma</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">i was more or less curious about the wires you ran to the amp cause it said welding wire in the pic, but i got the correct wire i needed today anyhow and plenty of it so i can hook up everything and do the BIG 3</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>Ahh, the pic of the 4/0 welding wire was only an example.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3603,
+        "post_date_time": "2006-01-15T16:03:00",
+        "user_username": "denmason",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tJust finished my BIG 3 UPGRADE!!!<br>\nEverything went well and very easy. I haven't received my new 200 amp alternator yet but I though since it was a nice day I might as well do the wires. Started up the truck and noticed my meter was reading 13.6 instead of the usual 12.3 that it has been reading. Adjusted my headunit and when I shut the truck off........... I noticed I didn't get the big THUMP from my sub... YIPPIE!!!<br>\nI think this upgrade is well worth the time and effort to do. Only took a little over an hour.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3604,
+        "post_date_time": "2006-02-03T12:27:00",
+        "user_username": "Bigdrumma22",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tCould someone better explain the Big 3 a little better. What wires you need, where they go? You said it was addon, right? Not replacing anything??\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3605,
+        "post_date_time": "2006-02-03T12:53:00",
+        "user_username": "x6369x",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>Bigdrumma22</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">Could someone better explain the Big 3 a little better. What wires you need, where they go? You said it was addon, right? Not replacing anything??</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>Battery positive to alternator,<br>\nBattery negative to chassis/frame,<br>\nEngine block to chassis/frame<br>\n<br>\nAnd yes, this is an addition to the existing wires.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3606,
+        "post_date_time": "2006-02-03T13:56:00",
+        "user_username": "Bigdrumma22",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>x6369x</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">Battery positive to alternator,<br>\nBattery negative to chassis/frame,<br>\nEngine block to chassis/frame<br>\n<br>\nAnd yes, this is an addition to the existing wires.</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>What about on older vehicles? Can it harm anything? I'd keep my positive running to the starter, but then add another going to the alternator? I understand the grounds won't hurt, but can you explain exactly what adding the positive will do?\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3607,
+        "post_date_time": "2006-02-25T15:24:00",
+        "user_username": "stocktires",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tWhat about useing the stinger side terminals, would they work if I wanted to replace the factory wire?\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3608,
+        "post_date_time": "2006-02-26T08:59:00",
+        "user_username": "motokoozie",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tElemental Designs has Big 3 Upgrade Kits.<br>\n<a href=\"http://www.edesignaudio.com/wire_cat.php?catid=48\" target=\"_blank\">www.edesignaudio.com/wire_cat.php?catid=48</a>\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3609,
+        "post_date_time": "2006-02-28T22:40:00",
+        "user_username": "x6369x",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>stocktires</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">What about useing the stinger side terminals, would they work if I wanted to replace the factory wire?</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>Because the stock wires are normally wrapped up in the factory loom with other wires, I don't recommend replacing any of the stock wires.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3610,
+        "post_date_time": "2006-04-14T14:58:00",
+        "user_username": "94FlamdS10Blazr",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>Bigdrumma22</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">What about on older vehicles? Can it harm anything? I'd keep my positive running to the starter, but then add another going to the alternator? I understand the grounds won't hurt, but can you explain exactly what adding the positive will do?</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>on older vehicles it might help to give an old alt some newer life making it easier for it to charge and it might actually increase gas mileage from the coil making more power<br>\nin newer computer driven vehicles it can keep the CEL light off, help mileage, increase part life, help the stereo system, etc\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3611,
+        "post_date_time": "2006-04-15T20:38:00",
+        "user_username": "Bigdrumma22",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>x6369x</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">Battery positive to alternator,<br>\nBattery negative to chassis/frame,<br>\nEngine block to chassis/frame<br>\n<br>\nAnd yes, this is an addition to the existing wires.</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>I know you said earlier that you didn't have SPL #'s, but do you have any other proof of this upgrade actually doing what it's supposed to (i.e. higher voltage readings, better mileage, etc.)? I do want to try it, but I don't want to do it just because everyone else is doing it. You know what I mean??\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3612,
+        "post_date_time": "2006-04-15T20:59:00",
+        "user_username": "cajundragger",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\t<div class=\"bbcode_container\">\n\t<div class=\"bbcode_quote\">\n\t\t<div class=\"quote_container\">\n\t\t\t<div class=\"bbcode_quote_container\"></div>\n\t\t\t\n\t\t\t\t<div class=\"bbcode_postedby\">\n\t\t\t\t\t<img src=\"http://www.fullsizechevy.com/forum/images/styles/gametime_red/misc/quote_icon.png\" alt=\"Quote\" title=\"Quote\"> Originally Posted by <strong>Bigdrumma22</strong>\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t\t<div class=\"message\">I know you said earlier that you didn't have SPL #'s, but do you have any other proof of this upgrade actually doing what it's supposed to (i.e. higher voltage readings, better mileage, etc.)? I do want to try it, but I don't want to do it just because everyone else is doing it. You know what I mean??</div>\n\t\t\t\n\t\t</div>\n\t</div>\n</div>heres my proof.....my truck used to drop down to 9 volts, now it doesn't seem to go much lower than 10.5...it may not seem much of a difference but for someone who is running alot smaller system than I am it is a world of difference.\n\t\t\t\t\t\t</blockquote>"
+      },
+      {
+        "id": 3613,
+        "post_date_time": "2006-04-16T00:09:00",
+        "user_username": "94FlamdS10Blazr",
+        "post_content_html": "<blockquote class=\"postcontent restore \">\n\t\t\t\t\t\t\tmine used to go as low as 11.5 hitting, now maybe 12.8. I also added about 1.5 miles to each gallon on the highway\n\t\t\t\t\t\t</blockquote>"
+      }
+    ]
+  },
+  "scoring": {
+    "thread_id": 805,
+    "final_score": 100,
+    "raw_score": 105,
+    "decision": "PROMOTE",
+    "scoring_version": "v1",
+    "result": {
+      "scoring_version": "v1",
+      "thread": {
+        "thread_id": 805,
+        "title": "NBS Big 3 upgrade",
+        "link": "https://web.archive.org/web/20160111013726/http://www.fullsizechevy.com/forum/general-discussion/audio-video-electronics/120517-nbs-big-3-upgrade.html",
+        "category_path": "General Discussion > Audio/Video Electronics",
+        "subcategory_name": "Audio/Video Electronics",
+        "is_sticky": true,
+        "replies_no": 317,
+        "pagination_no": 16,
+        "created_at": "2004-08-11T12:12:00Z",
+        "last_post_at": "2006-04-16T00:09:00Z",
+        "activity_span_years": 1,
+        "revival_count": 1
+      },
+      "score": {
+        "raw": 105,
+        "final": 100,
+        "decision": "PROMOTE"
+      },
+      "breakdown": {
+        "authority": {
+          "sticky_points": 25,
+          "reply_points": 40,
+          "page_points": 20,
+          "activity_span_points": 0,
+          "revival_points": 0
+        },
+        "problem_intent": {
+          "points": 20,
+          "matched_keywords": [
+            "upgrade",
+            "how to",
+            "wiring"
+          ],
+          "match_sources": [
+            "title",
+            "first_post"
+          ]
+        },
+        "category_bonus": {
+          "points": 0,
+          "matched_category": null
+        },
+        "cross_generation": {
+          "points": 0,
+          "detected": false,
+          "signals_matched": []
+        },
+        "noise": {
+          "points": 0,
+          "flags": []
+        }
+      }
+    }
+  },
+  "rewrite": {
+    "rewritten_title": "NBS Big 3 Upgrade",
+    "summary": "The NBS Big 3 upgrade involves adding thicker wires to improve current flow and reduce voltage sag, which can help with dimming headlights. This is not a replacement of the factory wiring but an addition.",
+    "seo_outline": [
+      "Purpose and Overview",
+      "Required Components and Costs",
+      "Installation Steps",
+      "Potential Benefits"
+    ],
+    "rewritten_article_markdown": "The NBS Big 3 upgrade involves adding thicker wires to improve current flow and reduce voltage sag, which can help with dimming headlights. This is not a replacement of the factory wiring but an addition.\n\nThis guide will walk you through the necessary components, costs, installation steps, and potential benefits.\n\n### Required Components and Costs\n- Battery positive to alternator wire (approx. 4’)\n- Battery negative to chassis wire (approx. 4’)\n- Engine block to chassis wire (approx. 5’)\n- 4 ring terminals\n- Heatshrink for covering the ring terminals\n- Flex loom (not used in this system, as Stinger wire was sufficient)\n\nEstimated total cost: $50-100, depending on the wire size/color and connector type.\n\nSome users suggest using welding wire, which can be cheaper but may not look as nice.\n\n### Installation Steps\n- The red (+) goes to the alternator +. The silver (-) goes to a chassis bolt under the truck.\n- The red (+) comes from the battery. The silver (-) is connected to the engine block just above the PS fluid reservoir and goes to a factory ground location on the firewall.",
+    "evidence": [
+      {
+        "article_excerpt": "The NBS Big 3 upgrade involves adding thicker wires to improve current flow and reduce voltage sag, which can help with dimming headlights. This is not a replacement of the factory wiring but an addition.",
+        "post_ids": [
+          3594
+        ],
+        "certainty": "certain",
+        "source_excerpt": "The purpose of the BIG 3 upgrade is to improve current flow, thus diminishing voltage sag. This is an upgrade/addition to the factory wiring, and not a replacement of the factory wiring."
+      },
+      {
+        "article_excerpt": "Required Components and Costs\n- Battery positive to alternator wire (approx. 4’)\n- Battery negative to chassis wire (approx. 4’)\n- Engine block to chassis wire (approx. 5’)\n- 4 ring terminals\n- Heatshrink for covering the ring terminals\n- Flex loom (not used in this system, as Stinger wire was sufficient)",
+        "post_ids": [
+          3594
+        ],
+        "certainty": "certain",
+        "source_excerpt": "List of supplies:\n1) battery positive to alternator (approx. 4’),\n2) battery negative to chassis (approx. 4’),\n3) engine block to chassis (approx. 5’),\n4) 4 ring terminals,\n5) heatshrink (to cover ring terminals),\n6) flex loom (I didn’t use any because the Stinger wire was so pretty)."
+      },
+      {
+        "article_excerpt": "Estimated total cost: $50-100, depending on the wire size/color and connector type.\n\nSome users suggest using welding wire, which can be cheaper but may not look as nice.",
+        "post_ids": [
+          3594
+        ],
+        "certainty": "certain",
+        "source_excerpt": "I would estimate the total cost of supplies to be $50-100, depending on the wire size/color and connector type. If you don’t care about how the wire looks, look into using welding wire:"
+      },
+      {
+        "article_excerpt": "The red (+) goes to the alternator +. The silver (-) goes to a chassis bolt under the truck.",
+        "post_ids": [
+          3594
+        ],
+        "certainty": "certain",
+        "source_excerpt": "The red (+) goes to the alternator +. The silver (-) goes to a chassis bolt under the truck:"
+      },
+      {
+        "article_excerpt": "The red (+) comes from the battery. The silver (-) is connected to the engine block just above the PS fluid reservoir and goes to a factory ground location on the firewall.",
+        "post_ids": [
+          3594
+        ],
+        "certainty": "certain",
+        "source_excerpt": "The red (+) comes from the battery.  The silver (-) is connected to the engine block just above the PS fluid reservoir and goes to a factory ground location on the fire wall:"
+      }
+    ],
+    "notes": "",
+    "post_rewrites": [
+      {
+        "post_id": 3594,
+        "rewritten_content": "My example uses an NBS truck, but this upgrade applies to any vehicle. Careful measurement and routing of wires are necessary for the BIG 3 upgrade, which aims to improve current flow and reduce voltage sag. This is an addition to factory wiring, not a replacement. It addresses dimming headlights but isn't a comprehensive solution.\n\nOther recommended upgrades include deep cycle batteries (Optima Yellow Top) and high output alternators. I used extra 0 gauge wire from previous installations, though 4 gauge wire would suffice. For my system, I utilized Audiopipe battery terminals, Stinger HPM Series 0 gauge (red and silver), and Stinger Expert Series 0 gauge ring terminals.\n\nMaterials needed:\n1. Battery positive to alternator (approx. 4')\n2. Battery negative to chassis (approx. 4')\n3. Engine block to chassis (approx. 5')\n4. 4 ring terminals\n5. Heatshrink for terminal protection\n6. Flex loom (not used due to the Stinger wire quality)\n\nEstimated supply cost: $50-100, depending on wire size/color and connector type.\n\nWiring connections:\n- Red (+) wire goes to the alternator +\n- Silver (-) wire connects to a chassis bolt under the truck\n- Red (+) comes from the battery\n- Silver (-) is connected to the engine block near the power steering fluid reservoir and then to a factory ground on the firewall\n\n[Image: 4/0 welding wire (courtesy of Rick/idbl_Fanatic)]"
+      },
+      {
+        "post_id": 3595,
+        "rewritten_content": "I haven't confirmed with SPL measurements, but I've noticed that my headlights dim less than stock after this upgrade. Many suggest it's one of the easiest and least expensive electrical upgrades you can make, along with a deep cycle battery like an Optima or a high-output (HO) alternator."
+      },
+      {
+        "post_id": 3596,
+        "rewritten_content": "www.weldingsupply.com offers affordable 1/0 wire and terminals; price is the primary factor. Name brand superiority does not justify higher costs in this case. Opt for premium wire if you value appearance, but it won't provide additional functionality. Using Big 3 can effectively address dimming issues at a lower cost."
+      },
+      {
+        "post_id": 3597,
+        "rewritten_content": "New user question: Are there any downsides to upgrading electrical wiring to 0 gauge, particularly regarding safety concerns?"
+      },
+      {
+        "post_id": 3598,
+        "rewritten_content": "Originally Posted by snuffalupagis\n\nTotal newb question: Are there any downsides to upgrading electrical wires to 0 gauge, especially regarding safety concerns? \n\nWith two out of the three wires being grounds, there are no safety concerns there. The OEM wire from the alternator to the positive terminal of the battery is not fused, so increasing its size would likely make little difference if it shorts. Such a short would require a major front-end collision to occur."
+      },
+      {
+        "post_id": 3599,
+        "rewritten_content": "Are you using 4/0 welding wire for your amplifier connection? I'm curious because I need to upgrade to a larger gauge wire for my system, but it's difficult to find 4AWG stereo wire by the foot in my area."
+      },
+      {
+        "post_id": 3600,
+        "rewritten_content": "Are you using 4/0 welding wire for your amp connection in your system? I'm curious because I need to upgrade to a larger gauge wire, but 4AWG stereo wire is not readily available by the foot in my area. There's a significant difference between 4/0 and regular 4 AWG wire. You are running two runs of 1/0 from front to back, correct?"
+      },
+      {
+        "post_id": 3601,
+        "rewritten_content": "I was curious about the wires you connected to the amplifier since they were labeled as welding wire in the picture. However, I have obtained the correct wire I need today, in sufficient quantity, so I can proceed with connecting everything and perform the BIG 3 setup."
+      },
+      {
+        "post_id": 3602,
+        "rewritten_content": "I was curious about the wires you ran to the amp, as they appeared to be welding wire in the picture. However, I got the correct wire I needed today, and I have plenty of it to connect everything, including the BIG 3. The 4/0 welding wire shown in the picture was just an example."
+      },
+      {
+        "post_id": 3603,
+        "rewritten_content": "Just completed a major 3-part upgrade, and everything went smoothly with minimal effort. Although I haven’t received my new 200-amp alternator yet, I decided to install the wiring on a nice day. After starting the truck, I noticed the voltage meter reading 13.6 volts instead of the usual 12.3. Adjusting the headunit and shutting off the truck revealed that the subwoofer no longer produced the expected thump. This upgrade seems well worth the time and effort; it took only about an hour to complete."
+      },
+      {
+        "post_id": 3604,
+        "rewritten_content": "Could someone provide a clearer explanation of the Big 3? Specifically, what wires are needed and where they should be connected? You mentioned that this is an add-on, not a replacement, correct?"
+      },
+      {
+        "post_id": 3605,
+        "rewritten_content": "Sure, the Big 3 consist of three essential wires for your setup:\n\n- Battery positive (red wire) to the alternator.\n- Battery negative (black wire) to the chassis/frame.\n- Engine block to the chassis/frame.\n\nThis setup is an addition to your existing wiring and does not replace any components."
+      },
+      {
+        "post_id": 3606,
+        "rewritten_content": "Originally Posted by x6369x\n\nBattery positive connected to the alternator, battery negative to the chassis/frame, and engine block also grounded to the chassis/frame. This is an additional setup on top of existing wiring.\n\nFor older vehicles, can this new configuration cause any harm?\n\nI plan to keep the positive connection to the starter while adding another to the alternator. While I understand that grounding won’t hurt anything, could you explain exactly what adding the positive connections will accomplish?"
+      },
+      {
+        "post_id": 3607,
+        "rewritten_content": "Would the stinger side terminals be suitable for replacing the factory wires?"
+      },
+      {
+        "post_id": 3608,
+        "rewritten_content": "Elemental Designs offers upgrade kits for major audio components. Visit [www.edesignaudio.com/wire_cat.php?catid=48](www.edesignaudio.com/wire_cat.php?catid=48) for more information."
+      },
+      {
+        "post_id": 3609,
+        "rewritten_content": "Using stinger side terminals could be a viable option if you want to replace the factory wires. However, since the stock wires are typically bundled within the factory loom with other wires, I do not recommend replacing any of the stock wires unless absolutely necessary."
+      },
+      {
+        "post_id": 3610,
+        "rewritten_content": "For older vehicles, adding a positive connection directly to the starter, while keeping grounds intact, could potentially benefit the alternator by providing additional charge. This might improve electrical system performance, enhance gas mileage in newer, computer-driven engines, and reduce the chance of the Check Engine Light (CEL) coming on. It could also bolster the stereo system and extend the life of components."
+      },
+      {
+        "post_id": 3611,
+        "rewritten_content": "Battery positive connected to the alternator, battery negative to the chassis/frame, and engine block also grounded to the chassis/frame. This is an addition to the existing wiring.\n\nDo you have any evidence that this upgrade, such as higher voltage readings or improved mileage, actually works? While I am considering trying it, I want to ensure it delivers on its promises before making the change."
+      },
+      {
+        "post_id": 3612,
+        "rewritten_content": "You mentioned earlier that you didn't have SPL numbers, but do you have any other evidence showing this upgrade works as intended—such as higher voltage readings or improved mileage? I'm considering trying it, but I want to be sure it performs as expected before doing so. My truck now consistently stays above 10.5 volts instead of dropping to 9 volts, which is a significant improvement for my smaller system."
+      },
+      {
+        "post_id": 3613,
+        "rewritten_content": "My car's fuel efficiency has decreased from a hit rate of 11.5 miles per gallon to around 12.8 mpg. Additionally, I'm getting approximately 1.5 extra miles per gallon on the highway."
+      }
+    ]
+  },
+  "routing": {
+    "era_id": "GMT800_NBS",
+    "era_score": 1,
+    "tech_type": "STEREO_ELECTRICAL",
+    "tech_score": 2,
+    "forum_main": null,
+    "forum_sub": null
+  },
+  "model": "qwen2.5:7b-instruct"
+}
