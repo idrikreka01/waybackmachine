@@ -14,6 +14,54 @@ from waybackmachine.scoring.context_builder import build_thread_context
 from waybackmachine.scoring.evergreen_score import compute_evergreen_score
 
 
+def _build_tags(result: dict, routing: dict | None) -> list[str]:
+    tags: list[str] = []
+    breakdown = result.get("breakdown") or {}
+    problem = breakdown.get("problem_intent") or {}
+    matched_keywords = problem.get("matched_keywords") or []
+    routing = routing or {}
+
+    era_id = routing.get("era_id") or ""
+    era_map = {
+        "SQUAREBODY_73_87": "squarebody",
+        "GMT400_OBS": "gmt400",
+        "GMT800_NBS": "gmt800",
+        "GMT900_NNBS": "gmt900",
+        "K2XX": "k2xx",
+        "T1XX_EV": "t1xx",
+    }
+    gen_tag = era_map.get(era_id)
+    if gen_tag:
+        tags.append(gen_tag)
+
+    tech_type = routing.get("tech_type") or ""
+    system_map = {
+        "INTERIOR": ["interior"],
+        "SUSPENSION": ["suspension"],
+        "STEREO_ELECTRICAL": ["electrical", "audio", "lighting"],
+        "TRANSMISSION": ["transmission"],
+    }
+    for t in system_map.get(tech_type, []):
+        if t not in tags:
+            tags.append(t)
+
+    kw_lower = [str(k).lower() for k in matched_keywords]
+    intent_tags: list[str] = []
+    if any("how to" in k or "guide" in k for k in kw_lower):
+        intent_tags.append("how-to")
+        intent_tags.append("guide")
+    if any("troubleshooting" in k or "symptoms" in k for k in kw_lower):
+        intent_tags.append("troubleshooting")
+    if any("upgrade" in k or "swap" in k or "install" in k or "retrofit" in k for k in kw_lower):
+        intent_tags.append("upgrade")
+
+    for t in intent_tags:
+        if t not in tags:
+            tags.append(t)
+
+    return tags
+
+
 def _eligible_thread_ids(session, posts_fetched_only: bool = True):
     q = session.query(Thread.id)
     if posts_fetched_only:
@@ -39,17 +87,21 @@ def _should_save(
 
 def _upsert_score(session, thread_id: int, result: dict, routing: dict | None) -> None:
     score = result["score"]
+    tags = _build_tags(result, routing)
+    result_with_tags = dict(result)
+    if tags:
+        result_with_tags["tags"] = tags
     row = (
         session.query(ThreadEvergreenScore)
         .filter(ThreadEvergreenScore.thread_id == thread_id)
         .first()
     )
     payload = {
-        "scoring_version": result["scoring_version"],
+        "scoring_version": result_with_tags["scoring_version"],
         "final_score": score["final"],
         "raw_score": score["raw"],
         "decision": score["decision"],
-        "result_json": json.dumps(result),
+        "result_json": json.dumps(result_with_tags),
     }
     if routing is not None:
         payload.update(

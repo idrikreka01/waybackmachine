@@ -21,7 +21,7 @@ from waybackmachine.scraping.subcategories import fetch_subcategories
 from waybackmachine.scraping.threads import fetch_threads
 
 LOG = logging.getLogger(__name__)
-MAX_SCRAPE_WORKERS = 5
+MAX_SCRAPE_WORKERS = 10
 MAX_SUBCATEGORY_WORKERS = 3
 
 

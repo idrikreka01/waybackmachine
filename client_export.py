@@ -27,6 +27,17 @@ def safe_str(value: Any) -> str:
     return str(value)
 
 
+def strip_html_preview(value: Any) -> str:
+    text = safe_str(value)
+    if not text:
+        return ""
+    import re
+
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text[:2000]
+
+
 def write_csv(path: Path, headers: list[str], rows: list[list[Any]]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
@@ -90,6 +101,12 @@ def build_flat_rows(
         scoring = thread.get("scoring", {}) or {}
         routing = thread.get("routing", {}) or {}
         ai_article = thread.get("ai_article", {}) or {}
+        score_payload = scoring.get("result_json") or {}
+        tags_value = score_payload.get("tags") or []
+        if isinstance(tags_value, list):
+            tags_str = ",".join(str(t) for t in tags_value if t)
+        else:
+            tags_str = ""
 
         thread_id = thread.get("thread_id")
         score_blob_key = ""
@@ -159,6 +176,7 @@ def build_flat_rows(
             ai_article_blob_key,
             ai_post_rewrites_blob_key,
             thread.get("ai_post_rewrites_count"),
+            tags_str,
         ])
 
         for post in thread.get("posts", []):
@@ -177,8 +195,8 @@ def build_flat_rows(
                 for idx, part in enumerate(rewritten_chunks):
                     blob_rows.append([rewritten_blob_key, "post", post_id, "rewritten_content", idx, part])
 
-            original_preview = safe_str(post.get("original_html"))[:2000]
-            rewritten_preview = safe_str(post.get("rewritten_content"))[:2000]
+            original_preview = strip_html_preview(post.get("original_html"))
+            rewritten_preview = strip_html_preview(post.get("rewritten_content"))
             if isinstance(post_id, int):
                 post_lookup[post_id] = {
                     "original_preview": original_preview,
@@ -321,6 +339,7 @@ def export_csvs(report: dict) -> None:
         "ai_article_json_raw_blob_key",
         "ai_post_rewrites_json_raw_blob_key",
         "ai_post_rewrites_count",
+        "tags",
     ]
 
     category_headers = [
@@ -488,6 +507,7 @@ def export_excel(report: dict) -> None:
         "AI Article JSON Raw Blob Key",
         "AI Post Rewrites JSON Raw Blob Key",
         "AI Rewrite Count",
+        "Tags",
     ]
     ws_threads.append(thread_headers)
     for row in thread_rows:
@@ -595,10 +615,147 @@ def export_excel(report: dict) -> None:
     wb.save(excel_path)
 
 
+def export_simple_threads_csv(report: dict) -> None:
+    """
+    Write a simple, flat CSV with one row per thread, including:
+    - basic thread metadata
+    - tags
+    - original first-post preview (plain text)
+    - rewritten article preview (plain text)
+    """
+    headers = [
+        "thread_id",
+        "title",
+        "url",
+        "category_path",
+        "decision",
+        "final_score",
+        "era_id",
+        "tech_type",
+        "forum_main",
+        "forum_sub",
+        "tags",
+        "original_first_post_preview",
+        "rewritten_article_preview",
+    ]
+
+    rows: list[list[str]] = []
+    for thread in report.get("threads", []):
+        scoring = thread.get("scoring", {}) or {}
+        routing = thread.get("routing", {}) or {}
+        ai_article = thread.get("ai_article", {}) or {}
+
+        score_payload = scoring.get("result_json") or {}
+        tags_value = score_payload.get("tags") or []
+        if isinstance(tags_value, list):
+            tags_str = ",".join(str(t) for t in tags_value if t)
+        else:
+            tags_str = ""
+
+        posts = thread.get("posts") or []
+        first_post = posts[0] if posts else {}
+        original_first_preview = strip_html_preview(first_post.get("original_html"))
+        rewritten_article_preview = strip_html_preview(
+            ai_article.get("rewritten_article_markdown") if isinstance(ai_article, dict) else ""
+        )
+
+        rows.append(
+            [
+                safe_str(thread.get("thread_id")),
+                safe_str(thread.get("title")),
+                safe_str(thread.get("url")),
+                safe_str(thread.get("category_path")),
+                safe_str(scoring.get("decision")),
+                safe_str(scoring.get("final_score")),
+                safe_str(routing.get("era_id")),
+                safe_str(routing.get("tech_type")),
+                safe_str(routing.get("forum_main")),
+                safe_str(routing.get("forum_sub")),
+                tags_str,
+                original_first_preview,
+                rewritten_article_preview,
+            ]
+        )
+
+    write_csv(OUTPUT_DIR / "simple_threads.csv", headers, rows)
+
+
+def export_simple_posts_csv(report: dict) -> None:
+    """
+    Write a simple, flat CSV with one row per post (for all scored threads):
+    - basic thread metadata
+    - tags
+    - per-post original/rewritten previews (plain text)
+    """
+    headers = [
+        "thread_id",
+        "thread_title",
+        "thread_url",
+        "category_path",
+        "decision",
+        "final_score",
+        "era_id",
+        "tech_type",
+        "forum_main",
+        "forum_sub",
+        "tags",
+        "post_id",
+        "post_page_id",
+        "post_counter",
+        "post_date_time",
+        "user_username",
+        "original_preview",
+        "rewritten_preview",
+    ]
+
+    rows: list[list[str]] = []
+    for thread in report.get("threads", []):
+        scoring = thread.get("scoring", {}) or {}
+        routing = thread.get("routing", {}) or {}
+        score_payload = scoring.get("result_json") or {}
+        tags_value = score_payload.get("tags") or []
+        if isinstance(tags_value, list):
+            tags_str = ",".join(str(t) for t in tags_value if t)
+        else:
+            tags_str = ""
+
+        for post in thread.get("posts", []):
+            original_preview = strip_html_preview(post.get("original_html"))
+            rewritten_preview = strip_html_preview(post.get("rewritten_content"))
+            rows.append(
+                [
+                    safe_str(thread.get("thread_id")),
+                    safe_str(thread.get("title")),
+                    safe_str(thread.get("url")),
+                    safe_str(thread.get("category_path")),
+                    safe_str(scoring.get("decision")),
+                    safe_str(scoring.get("final_score")),
+                    safe_str(routing.get("era_id")),
+                    safe_str(routing.get("tech_type")),
+                    safe_str(routing.get("forum_main")),
+                    safe_str(routing.get("forum_sub")),
+                    tags_str,
+                    safe_str(post.get("post_id")),
+                    safe_str(post.get("post_page_id")),
+                    safe_str(post.get("post_counter")),
+                    safe_str(post.get("post_date_time")),
+                    safe_str(post.get("user_username")),
+                    original_preview,
+                    rewritten_preview,
+                ]
+            )
+
+    write_csv(OUTPUT_DIR / "simple_posts.csv", headers, rows)
+
+
 def main() -> None:
     report = build_report()
     export_excel(report)
-    print(f"Done. Single file: {OUTPUT_DIR.resolve() / 'client_report.xlsx'}")
+    export_simple_threads_csv(report)
+    export_simple_posts_csv(report)
+    print(f"Done. Excel: {OUTPUT_DIR.resolve() / 'client_report.xlsx'}")
+    print(f"Done. Simple Threads CSV: {OUTPUT_DIR.resolve() / 'simple_threads.csv'}")
+    print(f"Done. Simple Posts CSV: {OUTPUT_DIR.resolve() / 'simple_posts.csv'}")
 
 
 if __name__ == "__main__":

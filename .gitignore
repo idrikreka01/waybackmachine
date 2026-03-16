@@ -36,6 +36,10 @@ htmlcov/
 .ruff_cache/
 .mypy_cache/
 
+# Project-generated artifacts
+exports/
+samples/
+*.xlsx
 .idea/
 .vscode/
 *.swp

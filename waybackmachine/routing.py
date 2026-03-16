@@ -533,6 +533,49 @@ ROUTING_ROWS: list[dict[str, str]] = [
         "forum_main": "Diesel Tech & Duramax Forum",
         "forum_sub": "Diesel Tuning & Emissions",
     },
+    # General cross-platform technical forums (catch-all when era is missing or unsupported).
+    {
+        "era_id": "GENERAL",
+        "tech_type": "INTERIOR",
+        "forum_main": "General Truck Discussion",
+        "forum_sub": "Interior & Cabin",
+    },
+    {
+        "era_id": "GENERAL",
+        "tech_type": "EXTERIOR",
+        "forum_main": "General Truck Discussion",
+        "forum_sub": "Exterior & Body",
+    },
+    {
+        "era_id": "GENERAL",
+        "tech_type": "SUSPENSION",
+        "forum_main": "General Truck Discussion",
+        "forum_sub": "Suspension, Wheels & Tires",
+    },
+    {
+        "era_id": "GENERAL",
+        "tech_type": "TECH_MAINTENANCE",
+        "forum_main": "General Truck Discussion",
+        "forum_sub": "Technical & Maintenance",
+    },
+    {
+        "era_id": "GENERAL",
+        "tech_type": "PERFORMANCE",
+        "forum_main": "General Truck Discussion",
+        "forum_sub": "Performance, Mods & Tuning",
+    },
+    {
+        "era_id": "GENERAL",
+        "tech_type": "STEREO_ELECTRICAL",
+        "forum_main": "General Truck Discussion",
+        "forum_sub": "Audio, Video & Lighting",
+    },
+    {
+        "era_id": "GENERAL",
+        "tech_type": "TRANSMISSION",
+        "forum_main": "General Truck Discussion",
+        "forum_sub": "Transmissions & Drivetrain",
+    },
 ]
 
 
@@ -610,9 +653,20 @@ def route_thread(thread_payload: dict[str, Any]) -> dict[str, Any]:
         "forum_main": None,
         "forum_sub": None,
     }
-    if era and tech:
-        row = _pick_routing_row(era[0], tech[0])
-        if row is not None:
-            routing["forum_main"] = row["forum_main"]
-            routing["forum_sub"] = row["forum_sub"]
+    if tech:
+        # First try era-specific routing when we have an era match.
+        if era:
+            row = _pick_routing_row(era[0], tech[0])
+            if row is not None:
+                routing["forum_main"] = row["forum_main"]
+                routing["forum_sub"] = row["forum_sub"]
+        # If no era-specific mapping exists or era is unknown, fall back to GENERAL
+        # cross-platform technical forums so that technical threads still have a home.
+        if routing["forum_main"] is None or routing["forum_sub"] is None:
+            general_row = _pick_routing_row("GENERAL", tech[0])
+            if general_row is not None:
+                # Keep era_id/era_score as-is (may be None or a weak guess), but route
+                # into the general technical forum for this tech_type.
+                routing["forum_main"] = general_row["forum_main"]
+                routing["forum_sub"] = general_row["forum_sub"]
     return routing
