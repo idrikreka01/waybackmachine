@@ -36,15 +36,21 @@ def main() -> None:
     factory = get_session_factory()
     session = factory()
     try:
+        # Only rephrase posts for threads that passed scoring: PROMOTE or HOLD.
         rows: List[ThreadEvergreenScore] = (
             session.query(ThreadEvergreenScore)
             .options(
                 joinedload(ThreadEvergreenScore.thread).joinedload(Thread.posts),
             )
-            .filter(ThreadEvergreenScore.ai_post_rewrites_json.is_(None))
+            .filter(
+                ThreadEvergreenScore.ai_post_rewrites_json.is_(None),
+                ThreadEvergreenScore.decision.in_(("PROMOTE", "HOLD")),
+            )
             .all()
         )
-        print(f"Found {len(rows)} threads without post rewrites.")
+        print(
+            f"Found {len(rows)} PROMOTE/HOLD threads without post rewrites."
+        )
         for score_row in rows:
             thread: Thread | None = score_row.thread
             if thread is None:

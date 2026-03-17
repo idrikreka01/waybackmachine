@@ -161,15 +161,15 @@ def create_topic(
 ) -> Dict[str, Any]:
     url = base_url.rstrip("/") + "/posts.json"
 
-    data: Dict[str, Any] = {
-        "title": title,
-        "raw": body,
-        "category": category_id,
-    }
-
+    # Use list-of-tuples so requests sends repeated tags[] fields
+    data: List[tuple[str, Any]] = [
+        ("title", title),
+        ("raw", body),
+        ("category", str(category_id)),
+    ]
     if tags:
-        for i, t in enumerate(tags):
-            data[f"tags[{i}]"] = t
+        for t in tags:
+            data.append(("tags[]", t))
 
     resp = requests.post(url, headers=headers, data=data, timeout=30)
     try:
