@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+from datetime import datetime
 from difflib import SequenceMatcher
 from typing import Any
 from urllib import request
@@ -70,7 +71,7 @@ def _thread_to_payload(thread: Thread) -> dict[str, Any]:
 
     posts = sorted(
         getattr(thread, "posts", []),
-        key=lambda p: (p.post_date_time or None, p.id),
+        key=lambda p: (p.post_date_time or datetime.min, p.id),
     )
     post_items: list[dict[str, Any]] = []
     for p in posts:

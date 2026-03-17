@@ -641,10 +641,12 @@ def _html_to_plain_for_routing(html: str) -> str:
 def route_thread(thread_payload: dict[str, Any]) -> dict[str, Any]:
     title = thread_payload.get("title") or ""
     first_html = thread_payload.get("first_post_html") or ""
+    _ = (thread_payload.get("category_path") or "").lower()
     first_plain = _html_to_plain_for_routing(first_html)
     base_text = f"{title} {first_plain}"
     era = detect_era(base_text)
     tech = detect_tech_type(base_text)
+
     routing: dict[str, Any] = {
         "era_id": era[0] if era else None,
         "era_score": era[1] if era else 0,
@@ -665,8 +667,15 @@ def route_thread(thread_payload: dict[str, Any]) -> dict[str, Any]:
         if routing["forum_main"] is None or routing["forum_sub"] is None:
             general_row = _pick_routing_row("GENERAL", tech[0])
             if general_row is not None:
-                # Keep era_id/era_score as-is (may be None or a weak guess), but route
-                # into the general technical forum for this tech_type.
                 routing["forum_main"] = general_row["forum_main"]
                 routing["forum_sub"] = general_row["forum_sub"]
+
+    # Global fallback: if nothing matched, send to General Truck Discussion
+    if routing["forum_main"] is None:
+        routing["forum_main"] = "General Truck Discussion"
+        routing["forum_sub"] = None
+
+    if routing["forum_main"] == "General Truck Discussion":
+        routing["era_id"] = "General Truck Discussion"
+
     return routing

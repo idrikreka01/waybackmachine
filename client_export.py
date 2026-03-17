@@ -38,6 +38,17 @@ def strip_html_preview(value: Any) -> str:
     return text[:2000]
 
 
+def strip_html_full(value: Any) -> str:
+    text = safe_str(value)
+    if not text:
+        return ""
+    import re
+
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
 def write_csv(path: Path, headers: list[str], rows: list[list[Any]]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
@@ -748,14 +759,136 @@ def export_simple_posts_csv(report: dict) -> None:
     write_csv(OUTPUT_DIR / "simple_posts.csv", headers, rows)
 
 
+def export_full_posts_csv(report: dict) -> None:
+    headers = [
+        "thread_id",
+        "thread_title",
+        "url",
+        "category_path",
+        "decision",
+        "final_score",
+        "era_id",
+        "tech_type",
+        "forum_main",
+        "forum_sub",
+        "tags",
+        "post_id",
+        "post_page_id",
+        "post_counter",
+        "post_date_time",
+        "user_username",
+        "original_html",
+        "rewritten_content",
+    ]
+
+    rows: list[list[str]] = []
+    for thread in report.get("threads", []):
+        scoring = thread.get("scoring", {}) or {}
+        routing = thread.get("routing", {}) or {}
+        score_payload = scoring.get("result_json") or {}
+        tags_value = score_payload.get("tags") or []
+        if isinstance(tags_value, list):
+            tags_str = ",".join(str(t) for t in tags_value if t)
+        else:
+            tags_str = ""
+
+        for post in thread.get("posts", []):
+            rows.append(
+                [
+                    safe_str(thread.get("thread_id")),
+                    safe_str(thread.get("title")),
+                    safe_str(thread.get("url")),
+                    safe_str(thread.get("category_path")),
+                    safe_str(scoring.get("decision")),
+                    safe_str(scoring.get("final_score")),
+                    safe_str(routing.get("era_id")),
+                    safe_str(routing.get("tech_type")),
+                    safe_str(routing.get("forum_main")),
+                    safe_str(routing.get("forum_sub")),
+                    tags_str,
+                    safe_str(post.get("post_id")),
+                    safe_str(post.get("post_page_id")),
+                    safe_str(post.get("post_counter")),
+                    safe_str(post.get("post_date_time")),
+                    safe_str(post.get("user_username")),
+                    safe_str(post.get("original_html")),
+                    safe_str(post.get("rewritten_content")),
+                ]
+            )
+
+    write_csv(OUTPUT_DIR / "full_posts.csv", headers, rows)
+
+def export_full_articles_csv(report: dict) -> None:
+    headers = [
+        "thread_id",
+        "title",
+        "url",
+        "category_path",
+        "decision",
+        "final_score",
+        "era_id",
+        "tech_type",
+        "forum_main",
+        "forum_sub",
+        "tags",
+        "original_thread_text",
+        "rewritten_article_markdown",
+    ]
+
+    rows: list[list[str]] = []
+    for thread in report.get("threads", []):
+        scoring = thread.get("scoring", {}) or {}
+        routing = thread.get("routing", {}) or {}
+        ai_article = thread.get("ai_article", {}) or {}
+        score_payload = scoring.get("result_json") or {}
+        tags_value = score_payload.get("tags") or []
+        if isinstance(tags_value, list):
+            tags_str = ",".join(str(t) for t in tags_value if t)
+        else:
+            tags_str = ""
+
+        original_pieces: list[str] = []
+        for post in thread.get("posts") or []:
+            original_pieces.append(strip_html_full(post.get("original_html")))
+        original_thread_text = "\n\n".join(p for p in original_pieces if p)
+
+        rewritten_article_markdown = (
+            ai_article.get("rewritten_article_markdown") if isinstance(ai_article, dict) else ""
+        )
+
+        rows.append(
+            [
+                safe_str(thread.get("thread_id")),
+                safe_str(thread.get("title")),
+                safe_str(thread.get("url")),
+                safe_str(thread.get("category_path")),
+                safe_str(scoring.get("decision")),
+                safe_str(scoring.get("final_score")),
+                safe_str(routing.get("era_id")),
+                safe_str(routing.get("tech_type")),
+                safe_str(routing.get("forum_main")),
+                safe_str(routing.get("forum_sub")),
+                tags_str,
+                original_thread_text,
+                safe_str(rewritten_article_markdown),
+            ]
+        )
+
+    write_csv(OUTPUT_DIR / "full_articles.csv", headers, rows)
+
+
 def main() -> None:
     report = build_report()
     export_excel(report)
     export_simple_threads_csv(report)
     export_simple_posts_csv(report)
+    export_full_articles_csv(report)
+    export_full_posts_csv(report)
     print(f"Done. Excel: {OUTPUT_DIR.resolve() / 'client_report.xlsx'}")
     print(f"Done. Simple Threads CSV: {OUTPUT_DIR.resolve() / 'simple_threads.csv'}")
     print(f"Done. Simple Posts CSV: {OUTPUT_DIR.resolve() / 'simple_posts.csv'}")
+    print(f"Done. Full Articles CSV: {OUTPUT_DIR.resolve() / 'full_articles.csv'}")
+    print(f"Done. Full Posts CSV: {OUTPUT_DIR.resolve() / 'full_posts.csv'}")
 
 
 if __name__ == "__main__":
