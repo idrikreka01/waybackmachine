@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 import argparse
 import json
 import logging
@@ -155,8 +156,10 @@ def _best_substring_match(article: str, excerpt: str) -> str | None:
         return None
 
     target = len(ex_tokens)
-    min_w = max(4, int(target * 0.70))
+    min_w = max(2, int(target * 0.70))
     max_w = min(len(spans), int(target * 1.30) + 2)
+    if min_w > max_w:
+        min_w = max_w
 
     best_ratio = 0.0
     best_sub: str | None = None
@@ -167,7 +170,7 @@ def _best_substring_match(article: str, excerpt: str) -> str | None:
             start = spans[i][0]
             end = spans[i + w - 1][1]
             sub = art[start:end].strip()
-            if len(sub) < 24:
+            if len(sub) < 12:
                 continue
             ratio = SequenceMatcher(None, norm_ex, _normalize_text(sub)).ratio()
             if ratio > best_ratio:
@@ -181,7 +184,9 @@ def _best_substring_match(article: str, excerpt: str) -> str | None:
     return None
 
 
-def _repair_evidence_excerpts(thread_payload: dict[str, Any], rewrite: dict[str, Any]) -> dict[str, Any]:
+def _repair_evidence_excerpts(
+    thread_payload: dict[str, Any], rewrite: dict[str, Any]
+) -> dict[str, Any]:
     article = rewrite.get("rewritten_article_markdown")
     evidence = rewrite.get("evidence")
     if not isinstance(article, str) or not article.strip():
@@ -189,7 +194,9 @@ def _repair_evidence_excerpts(thread_payload: dict[str, Any], rewrite: dict[str,
     if not isinstance(evidence, list) or not evidence:
         return rewrite
 
-    thread_plain = " ".join((p.get("post_content_plain") or "") for p in thread_payload.get("posts", []))
+    thread_plain = " ".join(
+        (p.get("post_content_plain") or "") for p in thread_payload.get("posts", [])
+    )
 
     changed = False
     for ev in evidence:
@@ -213,12 +220,16 @@ def _repair_evidence_excerpts(thread_payload: dict[str, Any], rewrite: dict[str,
     return rewrite
 
 
-def _detect_suspicious_article_content(thread_payload: dict[str, Any], rewrite: dict[str, Any]) -> list[str]:
+def _detect_suspicious_article_content(
+    thread_payload: dict[str, Any], rewrite: dict[str, Any]
+) -> list[str]:
     article = rewrite.get("rewritten_article_markdown")
     if not isinstance(article, str) or not article.strip():
         return ["Empty rewritten_article_markdown."]
 
-    thread_plain = " ".join((p.get("post_content_plain") or "") for p in thread_payload.get("posts", []))
+    thread_plain = " ".join(
+        (p.get("post_content_plain") or "") for p in thread_payload.get("posts", [])
+    )
     t = _normalize_text(thread_plain)
     a = _normalize_text(article)
 
@@ -290,7 +301,9 @@ def rewrite_post(post_html: str, model: str) -> str:
             "more",
         }
         if any(t not in glue and len(t) >= 4 for t in novel):
-            raise ValueError("Suspicious short-post rewrite expansion; refusing rewrite_post output.")
+            raise ValueError(
+                "Suspicious short-post rewrite expansion; refusing rewrite_post output."
+            )
     return rewritten
 
 
