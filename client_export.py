@@ -822,6 +822,7 @@ def export_full_articles_csv(report: dict) -> None:
     headers = [
         "thread_id",
         "title",
+        "rewritten_title",
         "url",
         "category_path",
         "decision",
@@ -855,11 +856,13 @@ def export_full_articles_csv(report: dict) -> None:
         rewritten_article_markdown = (
             ai_article.get("rewritten_article_markdown") if isinstance(ai_article, dict) else ""
         )
+        rewritten_title = ai_article.get("rewritten_title") if isinstance(ai_article, dict) else ""
 
         rows.append(
             [
                 safe_str(thread.get("thread_id")),
                 safe_str(thread.get("title")),
+                safe_str(rewritten_title),
                 safe_str(thread.get("url")),
                 safe_str(thread.get("category_path")),
                 safe_str(scoring.get("decision")),

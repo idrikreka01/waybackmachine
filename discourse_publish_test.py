@@ -227,149 +227,179 @@ def strip_html_to_text(html: Optional[str]) -> str:
 
 def main() -> None:
     """
-    Pick the highest-scoring PROMOTE thread from the DB and:
-    create a Discourse topic with the thread-level AI article as a single post.
+    Pick the top PROMOTE threads from the DB and:
+    create Discourse topics with the thread-level AI article as a single post.
     """
     base_url = get_env("DISCOURSE_BASE_URL")
+    max_threads = int(os.environ.get("DISCOURSE_MAX_THREADS", "5") or "5")
+    sleep_between = float(os.environ.get("DISCOURSE_SLEEP_BETWEEN_POSTS", "0") or "0")
 
     factory = get_session_factory()
     session = factory()
     try:
-        # Pick highest-score PROMOTE thread with AI post rewrites.
-        score_row: Optional[ThreadEvergreenScore] = (
+        # Pick highest-score PROMOTE threads with AI post rewrites.
+        query = (
             session.query(ThreadEvergreenScore)
             .filter(
                 ThreadEvergreenScore.decision == "PROMOTE",
                 ThreadEvergreenScore.ai_post_rewrites_json.isnot(None),
             )
             .order_by(ThreadEvergreenScore.final_score.desc())
-            .first()
         )
-        if score_row is None:
+        if max_threads > 0:
+            query = query.limit(max_threads)
+        score_rows: List[ThreadEvergreenScore] = query.all()
+        if not score_rows:
             raise RuntimeError("No PROMOTE threads with AI post rewrites found in DB.")
 
-        thread: Optional[Thread] = (
-            session.query(Thread)
-            .filter(Thread.id == score_row.thread_id)
-            .first()
-        )
-        if thread is None:
-            raise RuntimeError(f"Thread id={score_row.thread_id} not found.")
-
-        thread_id_str = str(thread.id)
+        created_topic_urls: List[str] = []
 
         import json
 
-        # Prefer full thread-level AI article when available.
-        body = ""
-        if score_row.ai_article_json:
-            try:
-                article = json.loads(score_row.ai_article_json)
-            except Exception:
-                article = None
-            if isinstance(article, dict):
-                body = (article.get("rewritten_article_markdown") or "").strip()
-
-        # Fallback: synthesize from original posts if needed.
-        if not body.strip():
-            posts: List[Post] = (
-                session.query(Post)
-                .filter(Post.thread_id == thread.id)
-                .order_by(Post.post_page_id.asc().nullsfirst(), Post.id.asc())
-                .all()
-            )
-            if not posts:
-                raise RuntimeError(f"No posts found for thread_id={thread.id}")
-            parts: List[str] = []
-            for p in posts:
-                text = strip_html_to_text(p.post_content or "")
-                if not text:
-                    continue
-                # Drop quoting boilerplate like "Originally Posted by <user>"
-                lines = []
-                for line in text.splitlines():
-                    stripped = line.strip()
-                    if stripped.lower().startswith("originally posted by "):
-                        continue
-                    lines.append(line)
-                cleaned = "\n".join(lines).strip()
-                if cleaned:
-                    parts.append(cleaned)
-            body = "\n\n".join(parts).strip()
-
-        if not body.strip():
-            raise RuntimeError("Thread has no article or post text to create topic body.")
-
-        title = thread.title or "Imported topic"
-
-        # Tags: derive from score_row.result_json if present.
-        tags: List[str] = []
-        try:
-            result_payload = json.loads(score_row.result_json)
-            tags_raw = (result_payload.get("tags") or [])
-            if isinstance(tags_raw, list):
-                tags = [str(t).strip() for t in tags_raw if str(t).strip()]
-        except Exception:
-            tags = []
-        tags = _normalize_tags(tags)
-
-        forum_main = score_row.forum_main or ""
-        derived_category_id: Optional[int] = None
-        if forum_main:
-            for cid, name in CATEGORY_BY_ID.items():
-                if name == forum_main:
-                    derived_category_id = cid
-                    break
-
-        if derived_category_id is None:
-            category_id_str = get_env("DISCOURSE_CATEGORY_ID")
-            try:
-                derived_category_id = int(category_id_str)
-            except ValueError:
-                raise RuntimeError("DISCOURSE_CATEGORY_ID must be an integer.")
-
-        print("Using DB thread for topic:")
-        print("  thread_id:", thread_id_str)
-        print("  title:", title)
-        print("  forum_main:", forum_main)
-        print("  mapped_category_id:", derived_category_id)
-        print("  tags:", tags)
-
         headers = build_headers()
-        if tags:
-            ensure_tags_exist(base_url=base_url, headers=headers, tags=tags)
 
-        try:
-            result = create_topic(
-                base_url=base_url,
-                headers=headers,
-                title=title,
-                body=body,
-                category_id=derived_category_id,
-                tags=tags if tags else None,
+        for idx, score_row in enumerate(score_rows, start=1):
+            thread: Optional[Thread] = (
+                session.query(Thread)
+                .filter(Thread.id == score_row.thread_id)
+                .first()
             )
-        except requests.exceptions.HTTPError:
-            if tags:
-                print(
-                    "Topic creation failed with tags; retrying without tags.",
-                    file=sys.stderr,
+            if thread is None:
+                raise RuntimeError(f"Thread id={score_row.thread_id} not found.")
+
+            thread_id_str = str(thread.id)
+
+            # Prefer full thread-level AI article when available.
+            body = ""
+            article: Optional[Dict[str, Any]] = None
+            if score_row.ai_article_json:
+                try:
+                    loaded = json.loads(score_row.ai_article_json)
+                except Exception:
+                    loaded = None
+                if isinstance(loaded, dict):
+                    article = loaded
+                    body = (loaded.get("rewritten_article_markdown") or "").strip()
+
+            # Fallback: synthesize from original posts if needed.
+            if not body.strip():
+                posts: List[Post] = (
+                    session.query(Post)
+                    .filter(Post.thread_id == thread.id)
+                    .order_by(Post.post_page_id.asc().nullsfirst(), Post.id.asc())
+                    .all()
                 )
+                if not posts:
+                    raise RuntimeError(f"No posts found for thread_id={thread.id}")
+                parts: List[str] = []
+                for p in posts:
+                    text = strip_html_to_text(p.post_content or "")
+                    if not text:
+                        continue
+                    # Drop quoting boilerplate like "Originally Posted by <user>"
+                    lines = []
+                    for line in text.splitlines():
+                        stripped = line.strip()
+                        if stripped.lower().startswith("originally posted by "):
+                            continue
+                        lines.append(line)
+                    cleaned = "\n".join(lines).strip()
+                    if cleaned:
+                        parts.append(cleaned)
+                body = "\n\n".join(parts).strip()
+
+            if not body.strip():
+                raise RuntimeError("Thread has no article or post text to create topic body.")
+
+            title = thread.title or "Imported topic"
+            if isinstance(article, dict):
+                rewritten_title = (article.get("rewritten_title") or "").strip()
+                if rewritten_title:
+                    title = rewritten_title
+
+            # Tags: derive from score_row.result_json if present.
+            tags: List[str] = []
+            try:
+                result_payload = json.loads(score_row.result_json)
+                tags_raw = (result_payload.get("tags") or [])
+                if isinstance(tags_raw, list):
+                    tags = [str(t).strip() for t in tags_raw if str(t).strip()]
+            except Exception:
+                tags = []
+            tags = _normalize_tags(tags)
+
+            forum_main = score_row.forum_main or ""
+            derived_category_id: Optional[int] = None
+            if forum_main:
+                for cid, name in CATEGORY_BY_ID.items():
+                    if name == forum_main:
+                        derived_category_id = cid
+                        break
+
+            if derived_category_id is None:
+                category_id_str = get_env("DISCOURSE_CATEGORY_ID")
+                try:
+                    derived_category_id = int(category_id_str)
+                except ValueError:
+                    raise RuntimeError("DISCOURSE_CATEGORY_ID must be an integer.")
+
+            print(f"Posting thread {idx}/{len(score_rows)}:")
+            print("  thread_id:", thread_id_str)
+            print("  title:", title)
+            print("  forum_main:", forum_main)
+            print("  mapped_category_id:", derived_category_id)
+            print("  tags:", tags)
+
+            if tags:
+                ensure_tags_exist(base_url=base_url, headers=headers, tags=tags)
+
+            try:
                 result = create_topic(
                     base_url=base_url,
                     headers=headers,
                     title=title,
                     body=body,
                     category_id=derived_category_id,
-                    tags=None,
+                    tags=tags if tags else None,
                 )
-            else:
-                raise
+            except requests.exceptions.HTTPError:
+                if tags:
+                    print(
+                        "Topic creation failed with tags; retrying without tags.",
+                        file=sys.stderr,
+                    )
+                    result = create_topic(
+                        base_url=base_url,
+                        headers=headers,
+                        title=title,
+                        body=body,
+                        category_id=derived_category_id,
+                        tags=None,
+                    )
+                else:
+                    raise
 
-        topic_id = int(result.get("topic_id"))
-        first_post_id = int(result.get("id"))
-        print("Created Discourse topic.")
-        print("  topic_id:", topic_id)
-        print("  first_post_id:", first_post_id)
+            topic_id = int(result.get("topic_id"))
+            first_post_id = int(result.get("id"))
+            topic_slug = (result.get("topic_slug") or "").strip()
+            if topic_slug:
+                topic_url = base_url.rstrip("/") + f"/t/{topic_slug}/{topic_id}"
+            else:
+                topic_url = base_url.rstrip("/") + f"/t/{topic_id}"
+
+            created_topic_urls.append(topic_url)
+
+            print("Created Discourse topic.")
+            print("  topic_id:", topic_id)
+            print("  first_post_id:", first_post_id)
+            print("  url:", topic_url)
+
+            if sleep_between > 0 and idx < len(score_rows):
+                time.sleep(sleep_between)
+
+        print("Done. Created topics:")
+        for url in created_topic_urls:
+            print(" ", url)
 
         # No replies: client wants one consolidated post per thread.
     finally:
