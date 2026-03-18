@@ -1,91 +1,96 @@
 from pathlib import Path
-import csv
 import json
 
+from client_export import build_report, export_full_articles_csv  # type: ignore[attr-defined]
+from waybackmachine.db.models import ThreadEvergreenScore  # type: ignore[attr-defined]
+from waybackmachine.db.session import get_session_factory  # type: ignore[attr-defined]
 
-SAMPLES_DIR = Path("samples")
-OUTPUT_PATH = Path("exports") / "full_articles.csv"
+
+def _synth_body_from_post_rewrites(score_row: ThreadEvergreenScore) -> str:
+    raw = score_row.ai_post_rewrites_json
+    if not raw:
+        return ""
+    try:
+        items = json.loads(raw)
+    except Exception:
+        return ""
+    if not isinstance(items, list):
+        return ""
+    parts: list[str] = []
+    for it in items:
+        if not isinstance(it, dict):
+            continue
+        txt = (it.get("rewritten_content") or "").strip()
+        if txt:
+            parts.append(txt)
+    return "\n\n".join(parts).strip()
 
 
 def main() -> None:
-    rows: list[list[str]] = []
+    report = build_report()
 
-    for path in sorted(SAMPLES_DIR.glob("thread_*.json")):
-        with path.open(encoding="utf-8") as f:
-            data = json.load(f)
+    # Enrich threads with a best-effort AI article body.
+    factory = get_session_factory()
+    session = factory()
+    try:
+        score_by_tid: dict[int, ThreadEvergreenScore] = {
+            r.thread_id: r for r in session.query(ThreadEvergreenScore).all()
+        }
+    finally:
+        session.close()
 
-        thread = data.get("thread") or {}
-        scoring = data.get("scoring") or {}
-        routing = data.get("routing") or {}
-        rewrite = data.get("rewrite") or {}
-
-        # Prefer article-style rewrite if present at top level
-        body = ""
-        if isinstance(rewrite, dict):
-            body = (rewrite.get("rewritten_article_markdown") or "").strip()
-
-        # If not present, try nested under scoring.result.rewrite
-        if not body:
-            result = scoring.get("result") or {}
-            inner_rewrite = result.get("rewrite") or {}
-            if isinstance(inner_rewrite, dict):
-                body = (inner_rewrite.get("rewritten_article_markdown") or "").strip()
-
-        if not body:
-            # Skip threads without an article body
+    threads = report.get("threads") or []
+    for t in threads:
+        tid = t.get("thread_id")
+        if not isinstance(tid, int):
+            continue
+        score_row = score_by_tid.get(tid)
+        if score_row is None:
             continue
 
-        # Tags come from scoring.result.tags if present
-        tags_list: list[str] = []
-        result = scoring.get("result") or {}
-        tags_raw = result.get("tags") or []
-        if isinstance(tags_raw, list):
-            tags_list = [str(t).strip() for t in tags_raw if str(t).strip()]
-        # Dedupe while preserving order
-        seen = set()
-        deduped_tags: list[str] = []
-        for t in tags_list:
-            if t not in seen:
-                seen.add(t)
-                deduped_tags.append(t)
-        tags = ",".join(deduped_tags)
+        # Start from DB ai_article_json if present.
+        ai_article_raw = score_row.ai_article_json
+        ai_article: dict = {}
+        if ai_article_raw:
+            try:
+                loaded = json.loads(ai_article_raw)
+                if isinstance(loaded, dict):
+                    ai_article = loaded
+            except Exception:
+                ai_article = {}
 
-        rows.append(
-            [
-                str(thread.get("thread_id") or ""),
-                str(thread.get("title") or ""),
-                str(thread.get("url") or ""),
-                str(thread.get("category_path") or ""),
-                str(scoring.get("decision") or ""),
-                str(scoring.get("final_score") or ""),
-                str(routing.get("forum_main") or ""),
-                str(routing.get("forum_sub") or ""),
-                tags,
-                body,
-            ]
-        )
+        body = (ai_article.get("rewritten_article_markdown") or "").strip()
+        if not body:
+            # Fall back to synthesizing from per-post rewrites.
+            body = _synth_body_from_post_rewrites(score_row)
 
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        if not ai_article and body:
+            ai_article = {
+                "rewritten_title": t.get("title") or "",
+                "summary": "",
+                "seo_outline": [],
+                "rewritten_article_markdown": body,
+                "evidence": [],
+                "notes": "",
+            }
+        elif body:
+            ai_article["rewritten_article_markdown"] = body
 
-    headers = [
-        "thread_id",
-        "title",
-        "url",
-        "category_path",
-        "decision",
-        "final_score",
-        "forum_main",
-        "forum_sub",
-        "tags",
-        "rewritten_article_markdown",
-    ]
+        if ai_article:
+            t["ai_article"] = ai_article
 
-    with OUTPUT_PATH.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(headers)
-        writer.writerows(rows)
+    # Keep only threads that now have some ai_article attached.
+    filtered_threads = []
+    for t in threads:
+        ai_article = t.get("ai_article")
+        if isinstance(ai_article, dict) and ai_article:
+            filtered_threads.append(t)
 
-    print(f"Done. Full Articles CSV (from samples/*): {OUTPUT_PATH.resolve()}")
+    report["threads"] = filtered_threads
+
+    export_full_articles_csv(report)  # type: ignore[arg-type]
+    out = Path("exports") / "full_articles.csv"
+    print(f"Done. Full Articles CSV: {out.resolve()}")
 
 
 if __name__ == "__main__":

@@ -21,6 +21,28 @@ from waybackmachine.routing import route_thread
 
 LOG = logging.getLogger(__name__)
 
+_EXPECTED_REWRITE_KEYS = {
+    "rewritten_title",
+    "summary",
+    "seo_outline",
+    "rewritten_article_markdown",
+    "evidence",
+    "notes",
+}
+
+
+def _assert_rewrite_shape(rewrite: Any) -> dict[str, Any]:
+    if not isinstance(rewrite, dict):
+        raise ValueError("rewrite must be a dict.")
+    keys = set(rewrite.keys())
+    if keys != _EXPECTED_REWRITE_KEYS:
+        unexpected = sorted(keys - _EXPECTED_REWRITE_KEYS)
+        missing = sorted(_EXPECTED_REWRITE_KEYS - keys)
+        raise ValueError(
+            f"rewrite has invalid keys. unexpected={unexpected} missing={missing} keys={sorted(keys)}"
+        )
+    return rewrite
+
 
 def _rewrite_with_fallback(thread_payload: dict[str, Any], model: str) -> dict[str, Any]:
     prompt = _build_prompt(thread_payload)
@@ -33,13 +55,15 @@ def _rewrite_with_fallback(thread_payload: dict[str, Any], model: str) -> dict[s
         LOG.warning("First rewrite failed validation: %s", first_err)
         correction_prompt = (
             prompt
-            + "\n\nYour last output failed validation because evidence coverage was insufficient "
-            "and/or banned filler phrases were used. Return JSON only. Add evidence for EVERY "
-            '"- **Answer:**" line and ensure each Answer line has at least one matching '
-            "evidence.article_excerpt substring. Remove any banned filler phrases "
-            "('generally', 'typically', 'might require', 'with a few modifications', "
-            "'recommended', 'usually') unless you quote them exactly from THREAD_DATA posts. "
-            "Do not change the JSON schema."
+            + "\n\nYour last output failed validation. Return one JSON OBJECT only (not an array). "
+            "Do not return an array of per-post rewrites. Keep the exact same JSON schema and keys. "
+            "Fix evidence so that evidence.article_excerpt values are copied from rewritten_article_markdown "
+            "exactly (exact substring) and are NOT copied from source posts. Add missing evidence entries "
+            "for meaningful technical bullet lines and paragraphs. Remove any banned filler phrases "
+            "('generally', 'typically', 'usually', 'recommended', 'might require', "
+            "'with a few modifications', 'research indicates') unless directly supported by THREAD_DATA.posts. "
+            "If a point comes from one side of a disagreement, attribute it explicitly in the article "
+            "instead of presenting it as a settled fact. Do not insert post ids into the article text."
         )
         try:
             second_rewrite = _call_ollama(correction_prompt, model=model)
@@ -75,8 +99,8 @@ def main() -> None:
     parser.add_argument(
         "--limit",
         type=int,
-        default=5,
-        help="Maximum number of PROMOTE threads to export (default: 5).",
+        default=None,
+        help="Maximum number of PROMOTE threads to export (default: no limit).",
     )
     parser.add_argument(
         "--output-dir",
@@ -88,6 +112,14 @@ def main() -> None:
         default=os.environ.get("OLLAMA_MODEL", "qwen2.5:7b-instruct"),
         help="Ollama model name to use for rewrites.",
     )
+    parser.add_argument(
+        "--regenerate-existing",
+        action="store_true",
+        help=(
+            "Regenerate AI output for threads that already have AI saved. "
+            "Overwrites ai_article_json and ai_post_rewrites_json in DB."
+        ),
+    )
     args = parser.parse_args()
 
     out_dir = Path(args.output_dir)
@@ -96,16 +128,18 @@ def main() -> None:
     factory = get_session_factory()
     session = factory()
     try:
-        rows = (
-            session.query(ThreadEvergreenScore)
-            .filter(
-                ThreadEvergreenScore.decision == "PROMOTE",
-                ThreadEvergreenScore.ai_article_json.is_(None),
-            )
-            .order_by(ThreadEvergreenScore.final_score.desc())
-            .limit(args.limit)
-            .all()
+        q = session.query(ThreadEvergreenScore).filter(
+            ThreadEvergreenScore.decision == "PROMOTE"
         )
+        if args.regenerate_existing:
+            q = q.filter(ThreadEvergreenScore.ai_post_rewrites_json.isnot(None))
+        else:
+            q = q.filter(ThreadEvergreenScore.ai_article_json.is_(None))
+
+        q = q.order_by(ThreadEvergreenScore.final_score.desc())
+        if args.limit is not None:
+            q = q.limit(args.limit)
+        rows = q.all()
         if not rows:
             LOG.warning("No PROMOTE rows found in thread_evergreen_score; nothing to export.")
             return
@@ -130,7 +164,9 @@ def main() -> None:
             except Exception as exc:  # pragma: no cover - defensive
                 LOG.error("Rewrite failed for thread id=%s: %s", row.thread_id, exc)
                 continue
+            rewrite = _assert_rewrite_shape(rewrite)
 
+            # Debug/internal helper rewrites (per-post). Not the publishable thread article.
             post_rewrites: list[dict[str, Any]] = []
             for post in thread_payload.get("posts", []):
                 post_id = post.get("id")
@@ -141,7 +177,6 @@ def main() -> None:
                 except Exception as exc:
                     LOG.warning("Per-post rewrite failed for post_id=%s: %s", post_id, exc)
                     post_rewrites.append({"post_id": post_id, "rewritten_content": ""})
-            rewrite["post_rewrites"] = post_rewrites
 
             try:
                 scoring_payload = json.loads(row.result_json)
@@ -180,9 +215,11 @@ def main() -> None:
                     "result": scoring_payload,
                 },
                 "rewrite": rewrite,
+                "post_rewrites": post_rewrites,
                 "routing": routing,
                 "model": args.model,
             }
+            _assert_rewrite_shape(sample.get("rewrite"))
 
             out_path = out_dir / f"thread_{row.thread_id}.json"
             out_path.write_text(json.dumps(sample, ensure_ascii=False, indent=2), encoding="utf-8")
