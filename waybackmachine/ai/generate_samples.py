@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 import argparse
 import json
 import logging
@@ -128,9 +129,7 @@ def main() -> None:
     factory = get_session_factory()
     session = factory()
     try:
-        q = session.query(ThreadEvergreenScore).filter(
-            ThreadEvergreenScore.decision == "PROMOTE"
-        )
+        q = session.query(ThreadEvergreenScore).filter(ThreadEvergreenScore.decision == "PROMOTE")
         if args.regenerate_existing:
             q = q.filter(ThreadEvergreenScore.ai_post_rewrites_json.isnot(None))
         else:
@@ -164,7 +163,11 @@ def main() -> None:
             except Exception as exc:  # pragma: no cover - defensive
                 LOG.error("Rewrite failed for thread id=%s: %s", row.thread_id, exc)
                 continue
-            rewrite = _assert_rewrite_shape(rewrite)
+            try:
+                rewrite = _assert_rewrite_shape(rewrite)
+            except ValueError as exc:
+                LOG.error("Rewrite has invalid shape for thread id=%s: %s", row.thread_id, exc)
+                continue
 
             # Debug/internal helper rewrites (per-post). Not the publishable thread article.
             post_rewrites: list[dict[str, Any]] = []
@@ -219,7 +222,6 @@ def main() -> None:
                 "routing": routing,
                 "model": args.model,
             }
-            _assert_rewrite_shape(sample.get("rewrite"))
 
             out_path = out_dir / f"thread_{row.thread_id}.json"
             out_path.write_text(json.dumps(sample, ensure_ascii=False, indent=2), encoding="utf-8")
